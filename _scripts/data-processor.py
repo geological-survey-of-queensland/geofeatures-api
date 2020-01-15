@@ -8,7 +8,7 @@ from rdflib import Graph, URIRef, Literal, Namespace, BNode
 from rdflib.namespace import RDF
 from os.path import dirname, realpath, join
 DATA_DIR = join(dirname(dirname(realpath(__file__))), '_data')
-CONFIG_DIR = join(dirname(dirname(realpath(__file__))), 'structf', '_config')
+CONFIG_DIR = join(dirname(dirname(realpath(__file__))), 'structf', 'config')
 
 g = Graph()
 SF = Namespace('http://linked.data.gov.au/dataset/qld-structural-framework/')
@@ -89,7 +89,7 @@ for file in os.listdir(DATA_DIR):
             .replace('extent', '')\
             .strip()
         this_feature_uri = URIRef(
-            SF + 'feature/' + name
+            SF + 'province/' + name
             .replace(' ', '')
             .replace('\'', '')
         )
@@ -113,7 +113,7 @@ for file in os.listdir(DATA_DIR):
         g.add((
             this_feature_uri,
             RDF.type,
-            #URIRef(FEATURE_TYPES.get(data['features'][0]['properties']['Rank']))
+            # URIRef(FEATURE_TYPES.get(data['features'][0]['properties']['Rank']))
             FEATURE_TYPES_FROM_NAMES[name.split(' ')[-1]]
         ))
 
