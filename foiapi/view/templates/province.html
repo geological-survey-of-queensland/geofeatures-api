@@ -3,6 +3,10 @@
 {% block content %}
 <h1>Province: {{ props['https://schema.org/name']['values'][0] }}</h1>
 <h3>URI: <a href="{{ props.uri }}">{{ props.uri }}</a></h3>
+  <div style="float:right;">
+  <h3>Alternates Profiles</h3>
+  <p>Different profile views of this register are here: <a href="{{ request.base_url }}?_profile=all">All Profiles</a>.</p>
+</div>
 <table class="metadata concept">
     <tr>
         <th style="padding-right: 10px;">
@@ -10,7 +14,7 @@
         </th>
         <td class="list">
           {% for v in props['http://www.w3.org/1999/02/22-rdf-syntax-ns#type']['values'] %}
-              <a href="{{ v }}">{{ v.split('/')[-1].split('#')[-1] }}</a><br />
+              <a href="{{ v }}">{{ v.split('/')[-1].split('#')[-1] }}</a>{% if not loop.last %},{% endif %}
           {% endfor %}
         </td>
     </tr>
@@ -20,14 +24,27 @@
         </th>
         <td class="list">
           {% for v in props['http://www.w3.org/2006/time#hasTime']['values'] %}
-              <a href="{{ v }}">{{ v.split('/')[-1].split('#')[-1] }}</a><br />
+              <a href="{{ v }}">{{ v.split('/')[-1].split('#')[-1] }}</a>{% if not loop.last %},{% endif %}
+          {% endfor %}
+        </td>
+    </tr>
+    <tr style="border-top:solid 10px white;">
+        <th style="padding-right: 10px;">
+          <a href="http://www.opengis.net/ont/geosparql#hasGeometry">Geometries</a>:
+        </th>
+        <td class="list">
+          {% for geom in props['http://www.opengis.net/ont/geosparql#hasGeometry']['values'] %}
+              <div>
+                <a href="{{ geom[1][1] }}">{{ geom[1][1].split('/')[-1].split('#')[-1] }}</a>: (as WKT)
+                {{ geom[0][1] }}
+              </div>
+            {% if not loop.last %}<br />{% endif %}
           {% endfor %}
         </td>
     </tr>
 </table>
-<hr>
-<h3>Alternate views</h3>
-<p>Other model views of this Concept are listed in the <a href="{{ request.base_url }}?_view=alternates">Alternates View</a>.</p>
+
+<div style="clear:both;"></div>
 {% endblock %}
 
 

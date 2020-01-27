@@ -2,7 +2,7 @@ import pyldapi
 import os
 from flask import Response, render_template
 from rdflib import Graph
-import structf.config as config
+import foiapi.config as config
 
 
 class LOCIDatasetRenderer(pyldapi.Renderer):
@@ -13,21 +13,21 @@ class LOCIDatasetRenderer(pyldapi.Renderer):
     def __init__(self, request, url=None, view=None, format=None):
 
         views = {
-            'dcat': pyldapi.View(
+            'dcat': pyldapi.Profile(
                 'Dataset Catalog Vocabulary - DCAT',
                 'The DCAT view, according to DCATv2 (2018)',
                 ['text/html'] + pyldapi.Renderer.RDF_MIMETYPES,
                 'text/html',
                 profile_uri='https://www.w3.org/TR/vocab-dcat-2/'
             ),
-            'reg': pyldapi.View(
+            'reg': pyldapi.Profile(
                 'Registry Ontology view',
                 'A \'core ontology for registry services\': items are listed in Registers with acceptance statuses',
                 ['text/html'] + pyldapi.Renderer.RDF_MIMETYPES,
                 'text/html',
                 profile_uri='http://purl.org/linked-data/registry'
             ),
-            'void': pyldapi.View(
+            'void': pyldapi.Profile(
                 'Vocabulary of Interlinked Data Ontology view',
                 'VoID is \'an RDF Schema vocabulary for expressing metadata about RDF datasets\'',
                 pyldapi.Renderer.RDF_MIMETYPES,

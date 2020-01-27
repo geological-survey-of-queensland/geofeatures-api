@@ -1,7 +1,7 @@
 import logging
-import structf.config as config
+import foiapi.config as config
 from flask import Flask
-from structf.controller import routes
+from foiapi.controller import routes
 import pyldapi
 import argparse
 

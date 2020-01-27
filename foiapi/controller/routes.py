@@ -1,13 +1,13 @@
-from flask import Blueprint, request, redirect, url_for, Response
+from flask import Blueprint, request, redirect, url_for, Response, render_template
 from flask_cors import CORS
 from pyldapi import RegisterRenderer, RegisterOfRegistersRenderer
-from structf.model.province import ProvinceRenderer
-import structf.config as config
-import structf.controller.LOCIDatasetRenderer
+from foiapi.model.province import ProvinceRenderer
+import foiapi.config as config
+import foiapi.controller.LOCIDatasetRenderer
 import json
 import requests
 from rdflib import Graph, URIRef, Literal, Namespace, RDF, RDFS, XSD, OWL
-import structf.config as config
+import foiapi.config as config
 
 
 routes = Blueprint('controller', __name__)
@@ -186,7 +186,7 @@ def troughs():
 #
 @routes.route('/province/<string:province_id>')
 def feature(province_id):
-    return ProvinceRenderer(request, request.url).render()
+    return ProvinceRenderer(request, request.base_url).render()
 
 
 #
@@ -194,12 +194,12 @@ def feature(province_id):
 #
 @routes.route('/', strict_slashes=True)
 def home():
-    return structf.controller.LOCIDatasetRenderer.LOCIDatasetRenderer(request, url=config.URI_BASE).render()
+    return foiapi.controller.LOCIDatasetRenderer.LOCIDatasetRenderer(request, url=config.URI_BASE).render()
 
 
 @routes.route('/index.ttl')
 def home_ttl():
-    return structf.controller.LOCIDatasetRenderer.LOCIDatasetRenderer(request, view='dcat', format='text/turtle').render()
+    return foiapi.controller.LOCIDatasetRenderer.LOCIDatasetRenderer(request, view='dcat', format='text/turtle').render()
 
 
 #
@@ -216,6 +216,45 @@ def reg():
     ).render()
 
 
+@routes.route('/ages')
+def ages():
+    q = '''
+        PREFIX time: <http://www.w3.org/2006/time#>
+        PREFIX sdo: <https://schema.org/>
+        SELECT ?age ?uri ?name
+        WHERE {
+            ?uri a <http://linked.data.gov.au/def/sweetgeofeatures#Province> ;
+                 time:hasTime ?age ;
+                 sdo:name ?name .
+        }
+        ORDER BY ?age ?name
+        '''
+    current_age = 'http://resource.geosciml.org/classifier/ics/ischart/Cambrian'
+    current_provinces = []
+    html = ''
+    for r in config.G.query(q):
+        this_age = str(r['age'])
+        if this_age == current_age:
+            current_provinces.append(
+                '<a href="{}">{}</a>'.format(
+                    str(r['uri']).replace('http://linked.data.gov.au/dataset/qld-structural-framework/',
+                                          'http://localhost:5000/'),
+                    str(r['name']))
+            )
+        else:
+            html += '''\n\t<tr>
+            <th><a href="{}">{}</a></th>
+            <td>
+                {}
+            </td>
+        </tr>'''.format(
+                this_age,
+                this_age.split('/')[-1],
+                '<br />\n\t\t\t'.join(current_provinces)
+            )
+        current_age = this_age
+
+    return render_template('ages.html', ages=html)
 # @routes.route('/meshblock/')
 # def meshblocks():
 #     total = ASGSFeature.total_meshblocks()

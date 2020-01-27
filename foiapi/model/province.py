@@ -1,6 +1,6 @@
-from pyldapi import Renderer, View
-from rdflib import Graph, URIRef, Namespace
-from structf.config import G
+from pyldapi import Renderer, Profile
+from rdflib import Graph, URIRef, Namespace, BNode
+from foiapi.config import G
 from flask import Response, render_template
 
 
@@ -10,9 +10,9 @@ class ProvinceRenderer(Renderer):
             'http://localhost:5000/',
             'http://linked.data.gov.au/dataset/qld-structural-framework/')
         # prepare views (Alt view included by default)
-        views = {
-            'geofoi': View(
-                'Geological Features of Interest View',
+        profiles = {
+            'geofoi': Profile(
+                'Geological Features of Interest Profile',
                 'This view shows the basic *feature* properties of a geological FoI, such as it\'s geometry, '
                 'and also some geological properties, such as it\'s geologic age.',
                 [
@@ -29,7 +29,7 @@ class ProvinceRenderer(Renderer):
         }
         # initialise super class
         self.uri = province_uri
-        super(ProvinceRenderer, self).__init__(request, province_uri, views, 'geofoi')
+        super(ProvinceRenderer, self).__init__(request, province_uri, profiles, 'geofoi')
 
     def render(self):
         # try returning alternates and all view
@@ -55,13 +55,36 @@ class ProvinceRenderer(Renderer):
                     'label': 'Has time',
                     'values': []
                 },
+
+                'http://www.opengis.net/ont/geosparql#hasGeometry': {
+                    'label': 'Has geometry',
+                    'values': []
+                },
             }
             found = False
             for p, o in G.predicate_objects(URIRef(self.uri)):
                 found = True
+
+                # for HTML printing
                 if str(p) in props.keys():
-                    props.get(str(p))['values'].append(str(o))  # for HTML print out
-                mini_graph.add((URIRef(self.uri), p, o))                           # for RDF serialization
+                    if str(p) == 'http://www.opengis.net/ont/geosparql#hasGeometry':  # handling the BNs
+                        geom = []
+                        for p2, o2 in G.predicate_objects(o):
+                            if str(p2) in [
+                                'http://linked.data.gov.au/def/geox#asWKT',
+                                'http://linked.data.gov.au/def/geox#hasRole'
+                            ]:
+                                geom.append((str(p2), str(o2)))
+                        props.get(str(p))['values'].append(sorted(geom))
+                    else:
+                        props.get(str(p))['values'].append(str(o))  # handling simple literals or URIs
+
+                # for RDF serialization
+                mini_graph.add((URIRef(self.uri), p, o))
+
+                if type(o) == BNode:
+                    for p2, o2 in G.predicate_objects(o):
+                        mini_graph.add((o, p2, o2))
 
             SF = Namespace('http://linked.data.gov.au/dataset/qld-structural-framework/')
             mini_graph.bind('sf', SF)

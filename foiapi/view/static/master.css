@@ -1204,7 +1204,7 @@ main.flex {
   .breadcrumbs a:active,
   .breadcrumbs a:visited {
     color: #fff;
-    margin-right: 20px;
+    margin-right: 10px;
   }
   .breadcrumbs ul {
     padding: 40px 0 15px;

@@ -39,6 +39,10 @@ p, ul, td, th {
     font-family: "Heebo", sans-serif;
 }
 
+p {
+  margin-bottom:10px;
+}
+
 th {
     padding-right: 10px;
     font-weight: bold;

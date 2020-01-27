@@ -1,0 +1,27 @@
+{% extends "page.html" %}
+
+    {% block content %}
+        <h1>GSQ's Features of Interest Linked Data Product</h1>
+        <p>This is an API that delivers GSQ's <a href="https://gisservices.information.qld.gov.au/arcgis/rest/services/GeoscientificInformation/StructuralFramework/MapServer">Structural Framework data holdings</a> online as <a href="https://www.w3.org/standards/semanticweb/data">Linked Data</a>. It's called a <em>Features of Interest</em> product since, in the future, it will deliver more than just Structural Framework Data.</p>
+      <p>This tool uses the <a href="http://linked.data.gov.au/def/sweetgeofeatures">SWEET Geological Features Profile Ontology</a> as its main data model and that model conforms to the <a href="https://locationindex.org">Location Index (LocI)</a> project's requirements so this information is compatible with other spatial data published by LocI.</p>
+
+        <h2>Use</h2>
+        <p>Try the links above to brows the Provinces stored in this dataset by type (Craton, Orogen etc.) or list Provinces by age.</p>
+        <h2>Code</h2>
+        <p>The code for this application is online in a Git code repository at <a href="https://github.com/geological-survey-of-queensland/gsq-foi-api">https://github.com/geological-survey-of-queensland/gsq-foi-api</a>.</p>
+
+        <h2>License</h2>
+        <p>The content of this API is licensed for use under the GNU v3 License. See the <a href="LICENSE">license deed</a> for details.</p>
+
+        <h2>Contacts</h2>
+        <p>If stuff breaks or doesn't work the way you expect it should or you want things extended, either add issues to the codebase (see above) or contact:</p>
+        <p style="margin-top: 10px;">
+            <strong>Nicholas Car</strong><br />
+            <em>Data Systems Architect</em><br />
+            <a href="https://surroundaustralia.com">SURROUND Australia Pty Ltd</a><br />
+            Brisbane, Queensland<br />
+            <a href="mailto:nicholas.car@surroundaustralia.com">nicholas.car@surroundaustralia.com</a><br />
+            ORCID: <a href="https://orcid.org/0000-0002-8742-7730">0000-0002-8742-7730</a>
+        </p>
+
+    {% endblock %}
