@@ -4,8 +4,9 @@
 <h1>Province: {{ props['https://schema.org/name']['values'][0] }}</h1>
 <h3>URI: <a href="{{ props.uri }}">{{ props.uri }}</a></h3>
   <div style="float:right;">
-  <h3>Alternates Profiles</h3>
-  <p>Different profile views of this register are here: <a href="{{ request.base_url }}?_profile=all">All Profiles</a>.</p>
+  <h3>Alternate Profiles</h3>
+    <p>Different profile (views) of this register are here:</p>
+    <ul><li><a href="{{ request.base_url }}?_profile=alt">Alternate Profiles listing</a></li></ul>
 </div>
 <table class="metadata concept">
     <tr>
@@ -46,20 +47,3 @@
 
 <div style="clear:both;"></div>
 {% endblock %}
-
-
-<!--
-sf:AdavaleBasin a sgf:Basin,
-        sdo:name "Adavale Basin"@en .
-        sgf:Province,
-        geo:Feature,
-        sdo:Landform ;
-    geo:hasGeometry [ a geo:Geometry ;
-            geox:asWKT "<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((145.26649881100002 -23.6367369663063,145.23949408900003 -23.6333508103064,145.225278903 -23.631273270306437,145.22366864399999 -23.631037932306462,145.216257422 -23.629954299306483,145.19615015600004 -23.622538410306646,145.178974789 -23.614023388306833,145.16032543300003 -23.60368227730708,145.14398721099997 -23.595108999307232,))"^^geo:wktLiteral ;
-            geox:hasRole geox:Boundary ],
-        [ a geo:Geometry ;
-            geox:asWKT "<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((143.925537922 -3000554.2315877248, 16346403.748648955 -23.572884777307745))"^^geo:wktLiteral ;
-            geox:hasRole geox:BoundingBox ] ;
-    time:hasTime <http://resource.geosciml.org/classifier/ics/ischart/Devonian> ;
-
--->

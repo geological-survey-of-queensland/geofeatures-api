@@ -32,7 +32,7 @@ class ProvinceRenderer(Renderer):
         super(ProvinceRenderer, self).__init__(request, province_uri, profiles, 'geofoi')
 
     def render(self):
-        # try returning alternates and all view
+        # try returning alt profile
         response = super().render()
         if response is not None:
             return response
@@ -109,16 +109,16 @@ class ProvinceRenderer(Renderer):
                     mimetype='text/plain'
                 )
 
-            if self.format in Renderer.RDF_MIMETYPES:
-                if self.format in ['application/rdf+json', 'application/json']:
+            if self.mediatype in Renderer.RDF_MIMETYPES:
+                if self.mediatype in ['application/rdf+json', 'application/json']:
                     resp = mini_graph.serialize(format='json-ld', encode='utf-8').decode('utf-8')
                 else:
-                    resp = mini_graph.serialize(format=self.format, encode='utf-8').decode('utf-8')
+                    resp = mini_graph.serialize(format=self.mediatype, encode='utf-8').decode('utf-8')
 
                 return Response(
                     resp,
                     status=200,
-                    mimetype=self.format
+                    mimetype=self.mediatype
                 )
             else:  # only HTML for now
                 return render_template(

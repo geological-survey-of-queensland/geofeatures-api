@@ -1,12 +1,7 @@
-from flask import Blueprint, request, redirect, url_for, Response, render_template
+from flask import Blueprint, request, render_template, redirect
 from flask_cors import CORS
 from pyldapi import RegisterRenderer, RegisterOfRegistersRenderer
-from foiapi.model.province import ProvinceRenderer
-import foiapi.config as config
-import foiapi.controller.LOCIDatasetRenderer
-import json
-import requests
-from rdflib import Graph, URIRef, Literal, Namespace, RDF, RDFS, XSD, OWL
+from foiapi.model import ProvinceRenderer, LOCIDatasetRenderer
 import foiapi.config as config
 
 
@@ -29,6 +24,23 @@ def get_register(geo_feature_type_uri):
         r.append((str(row['uri']), str(row['name'])))
 
     return r
+
+
+#
+#   Dataset
+#
+@routes.route('/', strict_slashes=True)
+def home():
+    return LOCIDatasetRenderer(
+        request,
+        profile='dcat',
+        mediatype='text/turtle'
+    ).render()
+
+
+@routes.route('/index.ttl')
+def home_ttl():
+    return redirect('/?_mediatype=text/turtle')
 
 
 #
@@ -181,30 +193,6 @@ def troughs():
     ).render()
 
 
-#
-#   Individual
-#
-@routes.route('/province/<string:province_id>')
-def feature(province_id):
-    return ProvinceRenderer(request, request.base_url).render()
-
-
-#
-#   pages
-#
-@routes.route('/', strict_slashes=True)
-def home():
-    return foiapi.controller.LOCIDatasetRenderer.LOCIDatasetRenderer(request, url=config.URI_BASE).render()
-
-
-@routes.route('/index.ttl')
-def home_ttl():
-    return foiapi.controller.LOCIDatasetRenderer.LOCIDatasetRenderer(request, view='dcat', format='text/turtle').render()
-
-
-#
-#   registers
-#
 @routes.route('/reg/')
 def reg():
     return RegisterOfRegistersRenderer(
@@ -255,44 +243,11 @@ def ages():
         current_age = this_age
 
     return render_template('ages.html', ages=html)
-# @routes.route('/meshblock/')
-# def meshblocks():
-#     total = ASGSFeature.total_meshblocks()
-#     if total is None:
-#         return Response('ASGS Web Service is unreachable', status=500, mimetype='text/plain')
-# 
-#     return ASGSRegisterRenderer(
-#         request,
-#         config.URI_MESHBLOCK_INSTANCE_BASE,
-#         'Register of ASGS Meshblocks',
-#         'All the ASGS Meshblocks',
-#         [config.URI_MESHBLOCK_CLASS],
-#         total,
-#         ASGSFeature,
-#         super_register=config.DATA_URI_PREFIX,
-#     ).render()
-# 
-# 
-# @routes.route('/statisticalarealevel1/')
-# def sa1s():
-#     total = ASGSFeature.total_sa1s()
-#     if total is None:
-#         return Response('ASGS Web Service is unreachable', status=500, mimetype='text/plain')
-# 
-#     return ASGSRegisterRenderer(
-#         request,
-#         config.URI_SA1_INSTANCE_BASE,
-#         'Register of ASGS Statistical Area Level 1 regions',
-#         'All the ASGS Statistical Area Level 1 regions',
-#         [config.URI_SA1_CLASS],
-#         total,
-#         ASGSFeature,
-#         super_register=config.DATA_URI_PREFIX,
-#     ).render()
 
 
 #
-#   instances
+#   Individuals
 #
-
-
+@routes.route('/province/<province_id>')
+def feature(province_id):
+    return ProvinceRenderer(request, request.base_url).render()
