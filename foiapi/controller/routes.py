@@ -217,12 +217,12 @@ def ages():
         }
         ORDER BY ?age ?name
         '''
-    current_age = 'http://resource.geosciml.org/classifier/ics/ischart/Cambrian'
+    previous_age = 'http://resource.geosciml.org/classifier/ics/ischart/Cambrian'
     current_provinces = []
     html = ''
     for r in config.G.query(q):
         this_age = str(r['age'])
-        if this_age == current_age:
+        if this_age == previous_age:
             current_provinces.append(
                 '<a href="{}">{}</a>'.format(
                     str(r['uri']).replace('http://linked.data.gov.au/dataset/qld-structural-framework/',
@@ -230,17 +230,18 @@ def ages():
                     str(r['name']))
             )
         else:
-            html += '''\n\t<tr>
+            html += '''\n\t\t<tr>
             <th><a href="{}">{}</a></th>
             <td>
                 {}
             </td>
         </tr>'''.format(
-                this_age,
-                this_age.split('/')[-1],
-                '<br />\n\t\t\t'.join(current_provinces)
+                previous_age,
+                previous_age.split('/')[-1],
+                '<br />\n\t\t\t\t'.join(current_provinces)
             )
-        current_age = this_age
+            current_provinces = []
+            previous_age = this_age
 
     return render_template('ages.html', ages=html)
 
