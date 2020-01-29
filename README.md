@@ -21,6 +21,43 @@ The API framework used to deliver this data is the [pyLDAPI](http://github.com/r
 
 In total, this API is installed on a web server and called by an HTTP server (Apache). Some requests (static pages) are served up directly from template HTML files. Other requests, such as for the list of all Basins or the homepage of a particular basin, are served via templates after the relevant data is extracted from the dataset (see 'Data' above).
 
+
+## Installation
+1. Clone the repo to the target server
+2. Tune the API's URI
+    * replace controller/routes.py's `feature()` function's `.replace()` statement that switches out object's persistent URI base with http://localhost:5000/ and use the URI of the installation API
+    * replace model/province.py's Province class's `__init__()` function's `.replace()` statement, as above
+    * replace the register.html template's `.replace()` statement as above
+3. Install a Python virtual environment 
+    * something like this:
+  
+    ```
+    ~$ mkdir venv                       # folder for the virtual env
+    ~$ python3 -m venv venv             # creates a virtual env in venv folder
+    ~$ source venv/bin/activate         # turns on the venv
+    ~$ pip install -r requirements.txt  # installs the API's Python module requirements in the venv
+    ~$ deactivate                       # switch out of the venv
+    ```
+4. Configure the target server's Apache to call the app, using the venv
+    * something like this, within the relevant Apache config file:
+  
+    Example vars:
+
+    ```
+    WSGIDaemonProcess foi threads=2 python-path=/var/www/gsq-foi-api/venv/:/var/www/gsq-foi-api/venv/lib/python3.6/site-packages/
+
+    WSGIProcessGroup foi
+    WSGIApplicationGroup %{GLOBAL}
+
+    WSGIScriptAlias /foi /var/www/gsq-foi-api/foiapi/app.wsgi
+    <Directory /var/www/gsq-foi-api/foiapi/>
+            WSGIScriptReloading On
+            Require all granted
+    </Directory>
+    ```
+
+Now restart Apache and the site should be up at /foi
+
  
 ## License
 The content of this API is licensed for use under the [Creative Commons 4.0 License](https://creativecommons.org/licenses/by/4.0/). See the [license deed](LICENSE) for details.
