@@ -25,7 +25,7 @@ In total, this API is installed on a web server and called by an HTTP server (Ap
 ## Installation
 1. Clone the repo to the target server
 2. Tune the API's URI
-    * replace controller/routes.py's `feature()` function's `.replace()` statement that switches out object's persistent URI base with http://localhost:5000/ and use the URI of the installation API
+    * replace controller/routes.py's `ages()` function's `.replace()` statement that switches out object's persistent URI base with http://localhost:5000/ and use the URI of the installation API
     * replace model/province.py's Province class's `__init__()` function's `.replace()` statement, as above
     * replace the register.html template's `.replace()` statement as above
 3. Install a Python virtual environment 

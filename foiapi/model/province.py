@@ -118,12 +118,18 @@ class ProvinceRenderer(Renderer):
                 return Response(
                     resp,
                     status=200,
-                    mimetype=self.mediatype
+                    mimetype=self.mediatype,
+                    headers=self.headers
                 )
             else:  # only HTML for now
-                return render_template(
-                    'province.html',
-                    props=props
+                return Response(
+                    render_template(
+                        'province.html',
+                        props=props
+                    ),
+                    status=200,
+                    mimetype=self.mediatype,
+                    headers=self.headers
                 )
 
 
