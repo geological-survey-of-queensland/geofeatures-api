@@ -11,7 +11,7 @@ app.register_blueprint(routes.routes)
 
 # run the Flask app
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='GSQ Structural Framework Product Dataset LDAPI')
+    parser = argparse.ArgumentParser(description='Queensland Features of Interest Dataset')
     parser.add_argument('--init', action="store_true", default=False, help='Initialise the application then exit (rofr.ttl etc)')
     args, unknown = parser.parse_known_args()
 
@@ -20,7 +20,7 @@ if __name__ == '__main__':
                         datefmt='%Y-%m-%d %H:%M:%S',
                         format='%(asctime)s %(levelname)s %(filename)s:%(lineno)s %(message)s')
 
-    # pyldapi.setup(app, conf.APP_DIR, conf.DATA_URI_PREFIX)
+    pyldapi.setup(app, config.APP_DIR, config.DATASET_URI)
 
     # run the Flask app
     if not args.init:

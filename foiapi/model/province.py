@@ -55,11 +55,10 @@ class ProvinceRenderer(Renderer):
                     'label': 'Has time',
                     'values': []
                 },
-
                 'http://www.opengis.net/ont/geosparql#hasGeometry': {
                     'label': 'Has geometry',
                     'values': []
-                },
+                }
             }
             found = False
             for p, o in G.predicate_objects(URIRef(self.uri)):
@@ -109,7 +108,7 @@ class ProvinceRenderer(Renderer):
                     mimetype='text/plain'
                 )
 
-            if self.mediatype in Renderer.RDF_MIMETYPES:
+            if self.mediatype in Renderer.RDF_MEDIA_TYPES:
                 if self.mediatype in ['application/rdf+json', 'application/json']:
                     resp = mini_graph.serialize(format='json-ld', encode='utf-8').decode('utf-8')
                 else:

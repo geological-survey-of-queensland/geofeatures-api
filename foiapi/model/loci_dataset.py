@@ -1,8 +1,9 @@
-from pyldapi import Renderer, Profile
+from pyldapi import Renderer, ContainerOfContainersRenderer, Profile
 from os.path import dirname, realpath, join, abspath
 from os.path import join
 from flask import Response, render_template
-from rdflib import Graph
+from rdflib import Graph, URIRef, Literal
+from rdflib.namespace import RDF, RDFS
 import foiapi.config as config
 
 TEMPLATES_DIR = join(
@@ -12,63 +13,59 @@ TEMPLATES_DIR = join(
 )
 
 
-class LOCIDatasetRenderer(Renderer):
+class LOCIDatasetRenderer(ContainerOfContainersRenderer):
     """
     Specialised implementation of the Renderer for displaying DCAT v2, VOID & Reg properties for the GNAF dataset as a
     whole. All content is contained in static HTML & RDT (turtle) files
     """
-    def __init__(self, request, url=None, profile=None, mediatype=None):
+    def __init__(self, request, label, comment):
+        # additional Profiles for this LOCI Dataset class thing
+        # mem profile is added by the ContainerRegister class
+        # alt is added by the Register class
         profiles = {
             'dcat': Profile(
-                'Dataset Catalog Vocabulary - DCAT',
-                'The DCAT profile, according to DCAT2',
-                ['text/html'] + Renderer.RDF_MIMETYPES,
+                'Data Catalog Vocabulary v2',
+                'A W3C RDF vocabulary for describing datasets',
+                ['text/html'] + Renderer.RDF_MEDIA_TYPES,
                 'text/html',
                 profile_uri='https://www.w3.org/TR/vocab-dcat-2/'
-            ),
-            'reg': Profile(
-                'Registry Ontology Profile',
-                'A \'core ontology for registry services\': items are listed in Registers with acceptance statuses',
-                ['text/html'] + Renderer.RDF_MIMETYPES,
-                'text/html',
-                profile_uri='http://purl.org/linked-data/registry'
             ),
             'void': Profile(
                 'Vocabulary of Interlinked Data Ontology Profile',
                 'VoID is \'an RDF Schema vocabulary for expressing metadata about RDF datasets\'',
-                Renderer.RDF_MIMETYPES,
+                Renderer.RDF_MEDIA_TYPES,
                 'text/turtle',
                 profile_uri='http://rdfs.org/ns/void'
-            ),
+            )
         }
-        # push RofR properties up to the RofR constructor
-        if url is None:
-            url = request.url
-        super().__init__(request, url, profiles, 'dcat')
+        super().__init__(
+            request,
+            config.DATASET_URI,
+            label,
+            comment,
+            profiles,
+            join(config.APP_DIR, 'cofc.ttl'),
+            default_profile_token='dcat'
+        )
 
     def render(self):
-        # try returning alt profile
+        # try returning alt profile from Renderer
+        # or mem profile from ContainerRegister
         response = super().render()
         if response is not None:
             return response
-        # it's another view so get the data for it
-        elif self.profile == 'reg':
-            if self.mediatype == 'text/html':
-                return render_template('home_reg.html')
-            else:
-                if self.mediatype not in self.RDF_MIMETYPES:
-                    self.mediatype = 'text/turtle'
-                return self._render_rdf_from_file('reg.ttl', self.mediatype)
+
+        # it's another profile so get the data for it
         elif self.profile == 'void':
             # VoID profile is only available in RDF
-            if self.mediatype not in self.RDF_MIMETYPES:
+            if self.mediatype not in self.RDF_MEDIA_TYPES:
                 self.mediatype = 'text/turtle'
             return self._render_rdf_from_file('void.ttl', self.mediatype)
         else:  # DCAT, default
             if self.mediatype == 'text/html':
                 return render_template('home_dcat.html')
             else:
-                if self.mediatype not in self.RDF_MIMETYPES:
+                if self.mediatype not in self.RDF_MEDIA_TYPES:
                     self.mediatype = 'text/turtle'
                 return self._render_rdf_from_file('dcat.ttl', self.mediatype)
 

@@ -1,6 +1,6 @@
 from flask import Blueprint, request, render_template, redirect
 from flask_cors import CORS
-from pyldapi import RegisterRenderer, RegisterOfRegistersRenderer
+from pyldapi import ContainerRenderer, ContainerOfContainersRenderer
 from foiapi.model import ProvinceRenderer, LOCIDatasetRenderer
 import foiapi.config as config
 
@@ -9,6 +9,27 @@ routes = Blueprint('controller', __name__)
 CORS(routes, automatic_options=True)
 
 
+#
+#   Dataset
+#
+@routes.route('/', strict_slashes=True)
+def home():
+    return LOCIDatasetRenderer(
+        request,
+        'Qld FoI Dataset, viewed as a Container of Features',
+        'As viewed via this <em>Members</em> profile, this Dataset is a Container of sub-Container listed as '
+        '<em>members</em> of it.'
+    ).render()
+
+
+@routes.route('/index.ttl')
+def home_ttl():
+    return redirect('/?_mediatype=text/turtle')
+
+
+#
+#   Register
+#
 def get_total(geo_feature_type_uri):
     q = '''SELECT (COUNT(*) AS ?c) WHERE {{?s a <{}>}}'''.format(geo_feature_type_uri)
 
@@ -26,182 +47,80 @@ def get_register(geo_feature_type_uri):
     return r
 
 
-#
-#   Dataset
-#
-@routes.route('/', strict_slashes=True)
-def home():
-    return LOCIDatasetRenderer(
+def container_response(container_uri, container_name, members):
+    return ContainerRenderer(
         request,
-        profile='dcat',
-        mediatype='text/turtle'
+        container_uri,
+        'Container of ' + container_name,
+        'Queensland\'s geological ' + container_name,
+        config.DATASET_URI,
+        config.DATASET_LABEL,
+        members,
+        len(members)
     ).render()
 
 
-@routes.route('/index.ttl')
-def home_ttl():
-    return redirect('/?_mediatype=text/turtle')
-
-
-#
-#   Register
-#
 @routes.route('/province/')
 def provinces():
+    container_uri = config.DATASET_URI + '/province/'
     object_class = 'http://linked.data.gov.au/def/sweetgeofeatures#Province'
-    object_name = 'Provinces'
-    per_page = request.args.get('per_page', type=int, default=50)
-    # total = get_total('http://linked.data.gov.au/def/sweetgeofeatures#Province')
-    register = get_register(object_class)
+    container_name = 'Provinces'
 
-    return RegisterRenderer(
-        request,
-        'http://localhost:5000/basin/',
-        'Register of ' + object_name,
-        'Queensland\'s geological ' + object_name,
-        register,
-        [object_class],
-        len(register),  # we can do this, rather than call total from Graph since all registers here fit on one page
-        super_register='http://localhost:5000/reg/',
-        per_page=per_page
-    ).render()
+    return container_response(container_uri, container_name, get_register(object_class))
 
 
 @routes.route('/subprovince/')
 def subprovinces():
+    container_uri = config.DATASET_URI + '/subprovince/'
     object_class = 'http://linked.data.gov.au/def/sweetgeofeatures#SubProvince'
-    object_name = 'Sub Provinces'
-    per_page = request.args.get('per_page', type=int, default=50)
-    # total = get_total('http://linked.data.gov.au/def/sweetgeofeatures#Province')
-    register = get_register(object_class)
+    container_name = 'Sub Provinces'
 
-    return RegisterRenderer(
-        request,
-        'http://localhost:5000/basin/',
-        'Register of ' + object_name,
-        'Queensland\'s geological ' + object_name,
-        register,
-        [object_class],
-        len(register),  # we can do this, rather than call total from Graph since all registers here fit on one page
-        super_register='http://localhost:5000/reg/',
-        per_page=per_page
-    ).render()
+    return container_response(container_uri, container_name, get_register(object_class))
 
 
 @routes.route('/craton/')
 def cratons():
+    container_uri = config.DATASET_URI + '/craton/'
     object_class = 'http://linked.data.gov.au/def/sweetgeofeatures#Craton'
-    object_name = 'Cratons'
-    per_page = request.args.get('per_page', type=int, default=50)
-    # total = get_total('http://linked.data.gov.au/def/sweetgeofeatures#Province')
-    register = get_register(object_class)
+    container_name = 'Cratons'
 
-    return RegisterRenderer(
-        request,
-        'http://localhost:5000/basin/',
-        'Register of ' + object_name,
-        'Queensland\'s geological ' + object_name,
-        register,
-        [object_class],
-        len(register),  # we can do this, rather than call total from Graph since all registers here fit on one page
-        super_register='http://localhost:5000/reg/',
-        per_page=per_page
-    ).render()
+    return container_response(container_uri, container_name, get_register(object_class))
 
 
 @routes.route('/orogen/')
 def orogens():
+    container_uri = config.DATASET_URI + '/orogen/'
     object_class = 'http://linked.data.gov.au/def/sweetgeofeatures#Orogen'
-    object_name = 'Orogens'
-    per_page = request.args.get('per_page', type=int, default=50)
-    # total = get_total('http://linked.data.gov.au/def/sweetgeofeatures#Province')
-    register = get_register(object_class)
+    container_name = 'Orogens'
 
-    return RegisterRenderer(
-        request,
-        'http://localhost:5000/basin/',
-        'Register of ' + object_name,
-        'Queensland\'s geological ' + object_name,
-        register,
-        [object_class],
-        len(register),  # we can do this, rather than call total from Graph since all registers here fit on one page
-        super_register='http://localhost:5000/reg/',
-        per_page=per_page
-    ).render()
+    return container_response(container_uri, container_name, get_register(object_class))
 
 
 @routes.route('/depression/')
 def depressions():
+    container_uri = config.DATASET_URI + '/depression/'
     object_class = 'http://linked.data.gov.au/def/sweetgeofeatures#Depression'
-    object_name = 'Depressions'
-    per_page = request.args.get('per_page', type=int, default=50)
-    # total = get_total('http://linked.data.gov.au/def/sweetgeofeatures#Province')
-    register = get_register(object_class)
+    container_name = 'Depressions'
 
-    return RegisterRenderer(
-        request,
-        'http://localhost:5000/basin/',
-        'Register of ' + object_name,
-        'Queensland\'s geological ' + object_name,
-        register,
-        [object_class],
-        len(register),  # we can do this, rather than call total from Graph since all registers here fit on one page
-        super_register='http://localhost:5000/reg/',
-        per_page=per_page
-    ).render()
+    return container_response(container_uri, container_name, get_register(object_class))
 
 
 @routes.route('/basin/')
 def basins():
+    container_uri = config.DATASET_URI + '/basin/'
     object_class = 'http://linked.data.gov.au/def/sweetgeofeatures#Basin'
-    object_name = 'Basins'
-    per_page = request.args.get('per_page', type=int, default=50)
-    # total = get_total('http://linked.data.gov.au/def/sweetgeofeatures#Province')
-    register = get_register(object_class)
+    container_name = 'Basins'
 
-    return RegisterRenderer(
-        request,
-        'http://localhost:5000/basin/',
-        'Register of ' + object_name,
-        'Queensland\'s geological ' + object_name,
-        register,
-        [object_class],
-        len(register),  # we can do this, rather than call total from Graph since all registers here fit on one page
-        super_register='http://localhost:5000/reg/',
-        per_page=per_page
-    ).render()
+    return container_response(container_uri, container_name, get_register(object_class))
 
 
 @routes.route('/trough/')
 def troughs():
+    container_uri = config.DATASET_URI + '/trough/'
     object_class = 'http://linked.data.gov.au/def/sweetgeofeatures#Trough'
-    object_name = 'Troughs'
-    per_page = request.args.get('per_page', type=int, default=50)
-    # total = get_total('http://linked.data.gov.au/def/sweetgeofeatures#Province')
-    register = get_register(object_class)
+    container_name = 'Troughs'
 
-    return RegisterRenderer(
-        request,
-        'http://localhost:5000/basin/',
-        'Register of ' + object_name,
-        'Queensland\'s geological ' + object_name,
-        register,
-        [object_class],
-        len(register),  # we can do this, rather than call total from Graph since all registers here fit on one page
-        super_register='http://localhost:5000/reg/',
-        per_page=per_page
-    ).render()
-
-
-@routes.route('/reg/')
-def reg():
-    return RegisterOfRegistersRenderer(
-        request,
-        config.DATA_URI_PREFIX,
-        'Register of Registers',
-        'The master register of this API',
-        config.APP_DIR + '/rofr.ttl'
-    ).render()
+    return container_response(container_uri, container_name, get_register(object_class))
 
 
 @routes.route('/ages')

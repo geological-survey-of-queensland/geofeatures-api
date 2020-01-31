@@ -155,3 +155,14 @@ body {
     font-size: 20px;
     font-weight: bold;
 }
+
+code {
+    font-family: 'Consolas', 'Deja Vu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
+}
+
+dt {
+    font-weight: bold;
+}
+dl dd {
+    margin: 0 0 .5em 2em;
+}
