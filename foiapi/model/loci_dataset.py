@@ -23,6 +23,14 @@ class LOCIDatasetRenderer(ContainerOfContainersRenderer):
         # mem profile is added by the ContainerRegister class
         # alt is added by the Register class
         profiles = {
+            'loci': Profile(
+                'LocI Ontology',
+                'A profile of several ontologies implemented to govern Linked Data resources published within the '
+                'LocI project.',
+                Renderer.RDF_MEDIA_TYPES,
+                'text/turtle',
+                profile_uri=' http://linked.data.gov.au/def/loci'
+            ),
             'dcat': Profile(
                 'Data Catalog Vocabulary v2',
                 'A W3C RDF vocabulary for describing datasets',
@@ -56,6 +64,11 @@ class LOCIDatasetRenderer(ContainerOfContainersRenderer):
             return response
 
         # it's another profile so get the data for it
+        elif self.profile == 'loci':
+            # VoID profile is only available in RDF
+            if self.mediatype not in self.RDF_MEDIA_TYPES:
+                self.mediatype = 'text/turtle'
+            return self._render_rdf_from_file('loci.ttl', self.mediatype)
         elif self.profile == 'void':
             # VoID profile is only available in RDF
             if self.mediatype not in self.RDF_MEDIA_TYPES:

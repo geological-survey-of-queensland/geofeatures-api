@@ -26,7 +26,7 @@
 
 Currently this dataset contains only Structural Framework data sourced from the Queensland GeoResGlobe (https://georesglobe.information.qld.gov.au/). In the future, it will contain other sorts of Geo FoIs too.
 
-This tool uses the SWEET Geological Features Profile Ontology (https://github.com/geological-survey-of-queensland/sweet-geological-features-profile-ont) as its main data model and that model conforms to the Location Index (LocI) project's requirements so this information is compatible with other spatial data published by LocI.""";
+This tool uses the SWEET Geological Features Profile Ontology (https://github.com/geological-survey-of-queensland/sweet-geological-features-profile-ont) as its main data model and that model conforms to the Location Index (LocI) project's requirements so this information is compatible with other spatial data published by LocI."""@en ;
     dct:issued "2020-02-04"^^xsd:date ;
     dct:modified "2020-02-04"^^xsd:date ;
     dct:publisher <http://linked.data.gov.au/org/gsq> ;
