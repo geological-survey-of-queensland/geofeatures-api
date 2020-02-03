@@ -25,11 +25,32 @@ class ProvinceRenderer(Renderer):
                 ],
                 'text/html',
                 profile_uri='http://example.com/profile/geofoi'
+            ),
+            'loci': Profile(
+                'LocI Ontology',
+                'A profile of several ontologies implemented to govern Linked Data resources published within the '
+                'LocI project.',
+                Renderer.RDF_MEDIA_TYPES,
+                'text/turtle',
+                profile_uri=' http://linked.data.gov.au/def/loci'
             )
         }
         # initialise super class
         self.uri = province_uri
         super(ProvinceRenderer, self).__init__(request, province_uri, profiles, 'geofoi')
+
+    def _render_rdf(self, g, mediatype, headers):
+        if mediatype in ['application/rdf+json', 'application/json']:
+            resp = g.serialize(format='json-ld', encode='utf-8').decode('utf-8')
+        else:
+            resp = g.serialize(format=mediatype, encode='utf-8').decode('utf-8')
+
+        return Response(
+            resp,
+            status=200,
+            mimetype=mediatype,
+            headers=headers
+        )
 
     def render(self):
         # try returning alt profile
@@ -37,10 +58,25 @@ class ProvinceRenderer(Renderer):
         if response is not None:
             return response
 
-        # it's another view so get the data for it
+        # it's another profile so get the data for it
         else:
             # extract properties from RDF
             mini_graph = Graph()
+            SF = Namespace('http://linked.data.gov.au/dataset/qldgeofoi/')
+            mini_graph.bind('sf', SF)
+            SGF = Namespace('http://linked.data.gov.au/def/sweetgeofeatures#')
+            mini_graph.bind('sgf', SGF)
+            GEO = Namespace("http://www.opengis.net/ont/geosparql#")
+            mini_graph.bind('geo', GEO)
+            SDO = Namespace("https://schema.org/")
+            mini_graph.bind('sdo', SDO)
+            TIME = Namespace("http://www.w3.org/2006/time#")
+            mini_graph.bind('time', TIME)
+            GEOX = Namespace("http://linked.data.gov.au/def/geox#")
+            mini_graph.bind('geox', GEOX)
+            GT = Namespace('http://resource.geosciml.org/classifier/ics/ischart/')
+            mini_graph.bind('geotime', GT)
+
             props = {
                 'uri': self.uri,
                 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type': {
@@ -60,6 +96,7 @@ class ProvinceRenderer(Renderer):
                     'values': []
                 }
             }
+
             found = False
             for p, o in G.predicate_objects(URIRef(self.uri)):
                 found = True
@@ -85,21 +122,6 @@ class ProvinceRenderer(Renderer):
                     for p2, o2 in G.predicate_objects(o):
                         mini_graph.add((o, p2, o2))
 
-            SF = Namespace('http://linked.data.gov.au/dataset/qld-structural-framework/')
-            mini_graph.bind('sf', SF)
-            SGF = Namespace('http://linked.data.gov.au/def/sweetgeofeatures#')
-            mini_graph.bind('sgf', SGF)
-            GEO = Namespace("http://www.opengis.net/ont/geosparql#")
-            mini_graph.bind('geo', GEO)
-            SDO = Namespace("https://schema.org/")
-            mini_graph.bind('sdo', SDO)
-            TIME = Namespace("http://www.w3.org/2006/time#")
-            mini_graph.bind('time', TIME)
-            GEOX = Namespace("http://linked.data.gov.au/def/geox#")
-            mini_graph.bind('geox', GEOX)
-            GT = Namespace('http://resource.geosciml.org/classifier/ics/ischart/')
-            mini_graph.bind('geotime', GT)
-            
             # if no rows are returned, the URI was unknown
             if not found:
                 return Response(
@@ -108,28 +130,24 @@ class ProvinceRenderer(Renderer):
                     mimetype='text/plain'
                 )
 
-            if self.mediatype in Renderer.RDF_MEDIA_TYPES:
-                if self.mediatype in ['application/rdf+json', 'application/json']:
-                    resp = mini_graph.serialize(format='json-ld', encode='utf-8').decode('utf-8')
-                else:
-                    resp = mini_graph.serialize(format=self.mediatype, encode='utf-8').decode('utf-8')
-
-                return Response(
-                    resp,
-                    status=200,
-                    mimetype=self.mediatype,
-                    headers=self.headers
-                )
-            else:  # only HTML for now
-                return Response(
-                    render_template(
-                        'province.html',
-                        props=props
-                    ),
-                    status=200,
-                    mimetype=self.mediatype,
-                    headers=self.headers
-                )
+            if self.profile == 'geofoi':
+                if self.mediatype in Renderer.RDF_MEDIA_TYPES:
+                    return self._render_rdf(mini_graph, self.mediatype, self.headers)
+                else:  # only HTML for now
+                    return Response(
+                        render_template(
+                            'province.html',
+                            props=props
+                        ),
+                        status=200,
+                        mimetype=self.mediatype,
+                        headers=self.headers
+                    )
+            else:  # self.profile == 'loci':
+                # LocI profile only has RDF
+                # return same result as geofoi for now
+                # (geofoi will have more properties not in loci in the future)
+                return self._render_rdf(mini_graph, self.mediatype, self.headers)
 
 
 # this class is for testing only
