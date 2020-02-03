@@ -1,6 +1,6 @@
 from flask import Blueprint, request, render_template, redirect, Response
 from flask_cors import CORS
-from pyldapi import ContainerRenderer, ContainerOfContainersRenderer
+from pyldapi import ContainerRenderer
 from foiapi.model import ProvinceRenderer, LOCIDatasetRenderer
 import foiapi.config as config
 from os.path import join
@@ -16,9 +16,8 @@ CORS(routes, automatic_options=True)
 def home():
     return LOCIDatasetRenderer(
         request,
-        'Qld FoI Dataset, viewed as a Container of Features',
-        'As viewed via this <em>Members</em> profile, this Dataset is a Container of sub-Container listed as '
-        '<em>members</em> of it.'
+        'Qld FoI Dataset',
+        'The Dataset of Queensland\'s Geological Features of Interest'
     ).render()
 
 
