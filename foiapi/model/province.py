@@ -8,7 +8,7 @@ class ProvinceRenderer(Renderer):
     def __init__(self, request, province_uri):
         province_uri = province_uri.replace(
             'http://localhost:5000/',
-            'http://linked.data.gov.au/dataset/qld-structural-framework/')
+            'http://linked.data.gov.au/dataset/qldgeofoi/')
         # prepare views (Alt view included by default)
         profiles = {
             'geofoi': Profile(

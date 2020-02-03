@@ -1,9 +1,9 @@
-from flask import Blueprint, request, render_template, redirect
+from flask import Blueprint, request, render_template, redirect, Response
 from flask_cors import CORS
 from pyldapi import ContainerRenderer, ContainerOfContainersRenderer
 from foiapi.model import ProvinceRenderer, LOCIDatasetRenderer
 import foiapi.config as config
-
+from os.path import join
 
 routes = Blueprint('controller', __name__)
 CORS(routes, automatic_options=True)
@@ -27,6 +27,12 @@ def home_ttl():
     return redirect('/?_mediatype=text/turtle')
 
 
+@routes.route('/data.ttl')
+def data():
+    data = open(join(config.APP_DIR, 'config', 'data.ttl'), 'rb').read().decode('utf-8')
+    return Response(data, status=200, mimetype='text/turtle')
+
+
 #
 #   Register
 #
@@ -42,7 +48,10 @@ def get_register(geo_feature_type_uri):
 
     r = []
     for row in config.G.query(q):
-        r.append((str(row['uri']), str(row['name'])))
+        r.append((
+            str(row['uri']).replace('http://linked.data.gov.au/dataset/qldgeofoi/', 'http://localhost:5000/'),
+            str(row['name'])
+        ))
 
     return r
 
@@ -144,7 +153,7 @@ def ages():
         if this_age == previous_age:
             current_provinces.append(
                 '<a href="{}">{}</a>'.format(
-                    str(r['uri']).replace('http://linked.data.gov.au/dataset/qld-structural-framework/',
+                    str(r['uri']).replace('http://linked.data.gov.au/dataset/qldgeofoi/',
                                           'http://localhost:5000/'),
                     str(r['name']))
             )
