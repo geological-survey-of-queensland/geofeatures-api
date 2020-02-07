@@ -32,7 +32,7 @@ class ProvinceRenderer(Renderer):
                 'LocI project.',
                 Renderer.RDF_MEDIA_TYPES,
                 'text/turtle',
-                profile_uri=' http://linked.data.gov.au/def/loci'
+                profile_uri='http://linked.data.gov.au/def/loci'
             )
         }
         # initialise super class
