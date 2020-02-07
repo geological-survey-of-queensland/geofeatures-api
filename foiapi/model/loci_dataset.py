@@ -24,26 +24,26 @@ class LOCIDatasetRenderer(ContainerOfContainersRenderer):
         # alt is added by the Register class
         profiles = {
             'loci': Profile(
+                'http://linked.data.gov.au/def/loci',
                 'LocI Ontology',
                 'A profile of several ontologies implemented to govern Linked Data resources published within the '
                 'LocI project.',
                 Renderer.RDF_MEDIA_TYPES,
-                'text/turtle',
-                profile_uri='http://linked.data.gov.au/def/loci'
+                'text/turtle'
             ),
             'dcat': Profile(
+                'https://www.w3.org/TR/vocab-dcat-2/',
                 'Data Catalog Vocabulary v2',
                 'A W3C RDF vocabulary for describing datasets',
                 ['text/html'] + Renderer.RDF_MEDIA_TYPES,
                 'text/html',
-                profile_uri='https://www.w3.org/TR/vocab-dcat-2/'
             ),
             'void': Profile(
+                'http://rdfs.org/ns/void',
                 'Vocabulary of Interlinked Data Ontology Profile',
                 'VoID is \'an RDF Schema vocabulary for expressing metadata about RDF datasets\'',
                 Renderer.RDF_MEDIA_TYPES,
-                'text/turtle',
-                profile_uri='http://rdfs.org/ns/void'
+                'text/turtle'
             )
         }
         super().__init__(

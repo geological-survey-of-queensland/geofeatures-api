@@ -12,6 +12,7 @@ class ProvinceRenderer(Renderer):
         # prepare views (Alt view included by default)
         profiles = {
             'geofoi': Profile(
+                'http://example.com/profile/geofoi',
                 'Geological Features of Interest Profile',
                 'This view shows the basic *feature* properties of a geological FoI, such as it\'s geometry, '
                 'and also some geological properties, such as it\'s geologic age.',
@@ -23,16 +24,15 @@ class ProvinceRenderer(Renderer):
                     "text/n3",
                     "text/n-triples"
                 ],
-                'text/html',
-                profile_uri='http://example.com/profile/geofoi'
+                'text/html'
             ),
             'loci': Profile(
+                'http://linked.data.gov.au/def/loci',
                 'LocI Ontology',
                 'A profile of several ontologies implemented to govern Linked Data resources published within the '
                 'LocI project.',
                 Renderer.RDF_MEDIA_TYPES,
-                'text/turtle',
-                profile_uri='http://linked.data.gov.au/def/loci'
+                'text/turtle'
             )
         }
         # initialise super class
