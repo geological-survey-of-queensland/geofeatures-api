@@ -29,6 +29,7 @@
           {% endfor %}
         </td>
     </tr>
+    {% if props['http://www.opengis.net/ont/geosparql#hasGeometry']['values']|length > 0 %}
     <tr style="border-top:solid 10px white;">
         <th style="padding-right: 10px;">
           <a href="http://www.opengis.net/ont/geosparql#hasGeometry">Geometries</a>:
@@ -36,13 +37,18 @@
         <td class="list">
           {% for geom in props['http://www.opengis.net/ont/geosparql#hasGeometry']['values'] %}
               <div>
-                <a href="{{ geom[1][1] }}">{{ geom[1][1].split('/')[-1].split('#')[-1] }}</a>: (as WKT)
-                {{ geom[0][1] }}
+                <a href="{{ geom[0][1] }}">{{ geom[0][1].split('/')[-1].split('#')[-1] }}</a>: (as WKT)
+                {% if geom[0][1] == 'http://linked.data.gov.au/def/geometry-roles/bounding-box' %}
+                {{ geom[1][1] }}
+                {% else %}
+                <em>lots of points</em>
+                {% endif %}
               </div>
             {% if not loop.last %}<br />{% endif %}
           {% endfor %}
         </td>
     </tr>
+    {% endif %}
 </table>
 
 <div style="clear:both;"></div>

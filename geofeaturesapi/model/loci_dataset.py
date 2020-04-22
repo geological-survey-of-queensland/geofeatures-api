@@ -4,7 +4,7 @@ from os.path import join
 from flask import Response, render_template
 from rdflib import Graph, URIRef, Literal
 from rdflib.namespace import RDF, RDFS
-import foiapi.config as config
+import geofeaturesapi.config as config
 
 TEMPLATES_DIR = join(
     dirname(dirname(realpath(__file__))),

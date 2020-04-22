@@ -1,6 +1,6 @@
 <img src="gsq.jpg" style="width:25%" />
 
-# GSQ's Features of Interest API 
+# GSQ's Geological Features API 
 This [API](https://en.wikipedia.org/wiki/Application_programming_interface) delivers the [Geological Survey of Queensland](https://en.wikipedia.org/wiki/Geological_Survey_of_Queensland)'s Structural Framework [Features of Interest](https://www.w3.org/TR/vocab-ssn/#SOSAFeatureOfInterest) data for Queensland according to [Linked Data](https://en.wikipedia.org/wiki/Linked_data) principles.
 
 The primary purpose of this API is to allow for the resolution of the URIs of various Features of Interest. For example, the FoI "Bowen Basin" has the persistent URI **http://linked.data.gov.au/dataset/qld-structural-framework/feature/BowenBasin** allocated to it and clicking on that URI will prompt this API to deliver a home page from it. Or data, depending on the type of request you make.

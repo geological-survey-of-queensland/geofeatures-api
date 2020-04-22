@@ -1,8 +1,8 @@
 from flask import Blueprint, request, render_template, redirect, Response
 from flask_cors import CORS
 from pyldapi import ContainerRenderer
-from foiapi.model import ProvinceRenderer, LOCIDatasetRenderer
-import foiapi.config as config
+from geofeaturesapi.model import GeoFeatureRenderer, LOCIDatasetRenderer
+import geofeaturesapi.config as config
 from os.path import join
 
 routes = Blueprint('controller', __name__)
@@ -48,7 +48,7 @@ def get_register(geo_feature_type_uri):
     r = []
     for row in config.G.query(q):
         r.append((
-            str(row['uri']).replace('http://linked.data.gov.au/dataset/qldgeofoi/', 'http://localhost:5000/'),
+            str(row['uri']).replace('http://linked.data.gov.au/dataset/gldgeofeatures/', 'http://localhost:5000/feature/'),
             str(row['name'])
         ))
 
@@ -68,10 +68,55 @@ def container_response(container_uri, container_name, members):
     ).render()
 
 
+@routes.route('/basin/')
+def basins():
+    container_uri = config.DATASET_URI + '/basin/'
+    object_class = 'http://linked.data.gov.au/def/geofeatures#Basin'
+    container_name = 'Basins'
+
+    return container_response(container_uri, container_name, get_register(object_class))
+
+
+@routes.route('/craton/')
+def cratons():
+    container_uri = config.DATASET_URI + '/craton/'
+    object_class = 'http://linked.data.gov.au/def/geofeatures#Craton'
+    container_name = 'Cratons'
+
+    return container_response(container_uri, container_name, get_register(object_class))
+
+
+@routes.route('/depression/')
+def depressions():
+    container_uri = config.DATASET_URI + '/depression/'
+    object_class = 'http://linked.data.gov.au/def/geofeatures#Depression'
+    container_name = 'Depressions'
+
+    return container_response(container_uri, container_name, get_register(object_class))
+
+
+@routes.route('/graben/')
+def grabens():
+    container_uri = config.DATASET_URI + '/graben/'
+    object_class = 'http://linked.data.gov.au/def/geofeatures#Graben'
+    container_name = 'Graben'
+
+    return container_response(container_uri, container_name, get_register(object_class))
+
+
+@routes.route('/orogen/')
+def orogens():
+    container_uri = config.DATASET_URI + '/orogen/'
+    object_class = 'http://linked.data.gov.au/def/geofeatures#Orogen'
+    container_name = 'Orogens'
+
+    return container_response(container_uri, container_name, get_register(object_class))
+
+
 @routes.route('/province/')
 def provinces():
     container_uri = config.DATASET_URI + '/province/'
-    object_class = 'http://linked.data.gov.au/def/sweetgeofeatures#Province'
+    object_class = 'http://linked.data.gov.au/def/geofeatures#Province'
     container_name = 'Provinces'
 
     return container_response(container_uri, container_name, get_register(object_class))
@@ -80,44 +125,8 @@ def provinces():
 @routes.route('/subprovince/')
 def subprovinces():
     container_uri = config.DATASET_URI + '/subprovince/'
-    object_class = 'http://linked.data.gov.au/def/sweetgeofeatures#SubProvince'
+    object_class = 'http://linked.data.gov.au/def/geofeatures#SubProvince'
     container_name = 'Sub Provinces'
-
-    return container_response(container_uri, container_name, get_register(object_class))
-
-
-@routes.route('/craton/')
-def cratons():
-    container_uri = config.DATASET_URI + '/craton/'
-    object_class = 'http://linked.data.gov.au/def/sweetgeofeatures#Craton'
-    container_name = 'Cratons'
-
-    return container_response(container_uri, container_name, get_register(object_class))
-
-
-@routes.route('/orogen/')
-def orogens():
-    container_uri = config.DATASET_URI + '/orogen/'
-    object_class = 'http://linked.data.gov.au/def/sweetgeofeatures#Orogen'
-    container_name = 'Orogens'
-
-    return container_response(container_uri, container_name, get_register(object_class))
-
-
-@routes.route('/depression/')
-def depressions():
-    container_uri = config.DATASET_URI + '/depression/'
-    object_class = 'http://linked.data.gov.au/def/sweetgeofeatures#Depression'
-    container_name = 'Depressions'
-
-    return container_response(container_uri, container_name, get_register(object_class))
-
-
-@routes.route('/basin/')
-def basins():
-    container_uri = config.DATASET_URI + '/basin/'
-    object_class = 'http://linked.data.gov.au/def/sweetgeofeatures#Basin'
-    container_name = 'Basins'
 
     return container_response(container_uri, container_name, get_register(object_class))
 
@@ -125,7 +134,7 @@ def basins():
 @routes.route('/trough/')
 def troughs():
     container_uri = config.DATASET_URI + '/trough/'
-    object_class = 'http://linked.data.gov.au/def/sweetgeofeatures#Trough'
+    object_class = 'http://linked.data.gov.au/def/geofeatures#Trough'
     container_name = 'Troughs'
 
     return container_response(container_uri, container_name, get_register(object_class))
@@ -138,7 +147,7 @@ def ages():
         PREFIX sdo: <https://schema.org/>
         SELECT ?age ?uri ?name
         WHERE {
-            ?uri a <http://linked.data.gov.au/def/sweetgeofeatures#Province> ;
+            ?uri a <http://linked.data.gov.au/def/geofeatures#Province> ;
                  time:hasTime ?age ;
                  sdo:name ?name .
         }
@@ -152,7 +161,7 @@ def ages():
         if this_age == previous_age:
             current_provinces.append(
                 '<a href="{}">{}</a>'.format(
-                    str(r['uri']).replace('http://linked.data.gov.au/dataset/qldgeofoi/',
+                    str(r['uri']).replace('http://linked.data.gov.au/dataset/qldgeofeatures/',
                                           'http://localhost:5000/'),
                     str(r['name']))
             )
@@ -176,6 +185,7 @@ def ages():
 #
 #   Individuals
 #
-@routes.route('/province/<province_id>')
-def feature(province_id):
-    return ProvinceRenderer(request, request.base_url).render()
+@routes.route('/feature/<feature_id>')
+def feature(feature_id):
+    uri = "http://linked.data.gov.au/dataset/gldgeofeatures/" + feature_id
+    return GeoFeatureRenderer(request, uri).render()

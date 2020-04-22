@@ -1,4 +1,4 @@
-from foiapi.model import LOCIDatasetRenderer, ProvinceRenderer
+from geofeaturesapi.model import LOCIDatasetRenderer, GeoFeatureRenderer
 
 
 # Mock class

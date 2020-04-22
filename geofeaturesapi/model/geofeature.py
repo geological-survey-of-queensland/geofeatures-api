@@ -1,20 +1,18 @@
 from pyldapi import Renderer, Profile
 from rdflib import Graph, URIRef, Namespace, BNode
-from foiapi.config import G
+from rdflib.namespace import RDF, SDO, TIME
+from geofeaturesapi.config import G
 from flask import Response, render_template
 
 
-class ProvinceRenderer(Renderer):
-    def __init__(self, request, province_uri):
-        province_uri = province_uri.replace(
-            'http://localhost:5000/',
-            'http://linked.data.gov.au/dataset/qldgeofoi/')
+class GeoFeatureRenderer(Renderer):
+    def __init__(self, request, geofeature_uri):
         # prepare views (Alt view included by default)
         profiles = {
-            'geofoi': Profile(
-                'http://example.com/profile/geofoi',
-                'Geological Features of Interest Profile',
-                'This view shows the basic *feature* properties of a geological FoI, such as it\'s geometry, '
+            'geofeature': Profile(
+                'http://example.com/profile/geofeature',
+                'Geological Features Profile',
+                'This view shows the basic *feature* properties of a geological features, such as it\'s geometry, '
                 'and also some geological properties, such as it\'s geologic age.',
                 [
                     "text/html",
@@ -36,8 +34,8 @@ class ProvinceRenderer(Renderer):
             )
         }
         # initialise super class
-        self.uri = province_uri
-        super(ProvinceRenderer, self).__init__(request, province_uri, profiles, 'geofoi')
+        self.uri = geofeature_uri
+        super(GeoFeatureRenderer, self).__init__(request, self.uri, profiles, 'geofeature')
 
     def _render_rdf(self, g, mediatype, headers):
         if mediatype in ['application/rdf+json', 'application/json']:
@@ -62,15 +60,13 @@ class ProvinceRenderer(Renderer):
         else:
             # extract properties from RDF
             mini_graph = Graph()
-            SF = Namespace('http://linked.data.gov.au/dataset/qldgeofoi/')
+            SF = Namespace('http://linked.data.gov.au/dataset/qldgeofeatures/')
             mini_graph.bind('sf', SF)
-            SGF = Namespace('http://linked.data.gov.au/def/sweetgeofeatures#')
+            SGF = Namespace('http://linked.data.gov.au/def/geofeatures#')
             mini_graph.bind('sgf', SGF)
             GEO = Namespace("http://www.opengis.net/ont/geosparql#")
             mini_graph.bind('geo', GEO)
-            SDO = Namespace("https://schema.org/")
             mini_graph.bind('sdo', SDO)
-            TIME = Namespace("http://www.w3.org/2006/time#")
             mini_graph.bind('time', TIME)
             GEOX = Namespace("http://linked.data.gov.au/def/geox#")
             mini_graph.bind('geox', GEOX)
@@ -79,19 +75,19 @@ class ProvinceRenderer(Renderer):
 
             props = {
                 'uri': self.uri,
-                'http://www.w3.org/1999/02/22-rdf-syntax-ns#type': {
+                str(RDF.type): {
                     'label': 'Type',
                     'values': []
                 },
-                'https://schema.org/name': {
+                str(SDO.name): {
                     'label': 'Name',
                     'values': []
                 },
-                'http://www.w3.org/2006/time#hasTime': {
+                str(TIME.hasTime): {
                     'label': 'Has time',
                     'values': []
                 },
-                'http://www.opengis.net/ont/geosparql#hasGeometry': {
+                str(GEO.hasGeometry): {
                     'label': 'Has geometry',
                     'values': []
                 }
@@ -103,13 +99,10 @@ class ProvinceRenderer(Renderer):
 
                 # for HTML printing
                 if str(p) in props.keys():
-                    if str(p) == 'http://www.opengis.net/ont/geosparql#hasGeometry':  # handling the BNs
+                    if p == GEO.hasGeometry:  # handling the BNs
                         geom = []
                         for p2, o2 in G.predicate_objects(o):
-                            if str(p2) in [
-                                'http://linked.data.gov.au/def/geox#asWKT',
-                                'http://linked.data.gov.au/def/geox#hasRole'
-                            ]:
+                            if p2 in [GEO.asWKT, GEOX.hasRole]:
                                 geom.append((str(p2), str(o2)))
                         props.get(str(p))['values'].append(sorted(geom))
                     else:
@@ -125,18 +118,18 @@ class ProvinceRenderer(Renderer):
             # if no rows are returned, the URI was unknown
             if not found:
                 return Response(
-                    'Province (or a sub class of Province) with ID {} not found.'.format(self.uri),
+                    'A Feature with ID {} was not found.'.format(self.uri),
                     status=404,
                     mimetype='text/plain'
                 )
 
-            if self.profile == 'geofoi':
+            if self.profile == 'geofeature':
                 if self.mediatype in Renderer.RDF_MEDIA_TYPES:
                     return self._render_rdf(mini_graph, self.mediatype, self.headers)
                 else:  # only HTML for now
                     return Response(
                         render_template(
-                            'province.html',
+                            'geofeature.html',
                             props=props
                         ),
                         status=200,
@@ -145,8 +138,8 @@ class ProvinceRenderer(Renderer):
                     )
             else:  # self.profile == 'loci':
                 # LocI profile only has RDF
-                # return same result as geofoi for now
-                # (geofoi will have more properties not in loci in the future)
+                # return same result as geofeature for now
+                # (geofeature will have more properties not in loci in the future)
                 return self._render_rdf(mini_graph, self.mediatype, self.headers)
 
 
@@ -154,7 +147,7 @@ class ProvinceRenderer(Renderer):
 class Mock:
     def __init__(self):
         self.values = {
-            '_profile': 'geofoi',
+            '_profile': 'geofeature',
             '_mediatype': 'text/html'
         }
 
@@ -165,6 +158,6 @@ if __name__ == '__main__':
 
     # import pprint
     # pprint.pprint(request.view)
-    p = ProvinceRenderer(request, 'http://linked.data.gov.au/dataset/qld-structural-framework/feature/BarnardProvince')
+    p = GeoFeatureRenderer(request, 'http://linked.data.gov.au/dataset/qldgeofeatures/BarnardProvince')
     print()
     print(p.render())
