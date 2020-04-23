@@ -50,7 +50,7 @@ def get_register(geo_feature_type_uri):
     r = []
     for row in config.G.query(q):
         r.append((
-            str(row['uri']).replace('http://linked.data.gov.au/dataset/gldgeofeatures/', 'http://localhost:5000/feature/'),
+            str(row['uri']).replace('http://linked.data.gov.au/dataset/qldgeofeaturesqldgeofeatures/', 'http://localhost:5000/feature/'),
             str(row['name'])
         ))
 
@@ -192,5 +192,5 @@ def ages():
 #
 @routes.route('/feature/<feature_id>')
 def feature(feature_id):
-    uri = "http://linked.data.gov.au/dataset/gldgeofeatures/" + feature_id
+    uri = "http://linked.data.gov.au/dataset/qldgeofeatures/" + feature_id
     return GeoFeatureRenderer(request, uri).render()
