@@ -5,7 +5,7 @@ from rdflib import Namespace
 
 APP_DIR = dirname(dirname(realpath(__file__)))
 
-with open(join(APP_DIR, 'foiapi', 'config', 'data.pickle'), 'rb') as f:
+with open(join(APP_DIR, 'geofeatures', 'config', 'data.pickle'), 'rb') as f:
     G = pickle.load(f)
     f.close()
 

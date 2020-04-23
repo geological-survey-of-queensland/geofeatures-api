@@ -1,6 +1,8 @@
 from flask import Blueprint, request, render_template, redirect, Response
 from flask_cors import CORS
 from pyldapi import ContainerRenderer
+from rdflib import Namespace
+from rdflib.namespace import SDO, TIME
 from geofeaturesapi.model import GeoFeatureRenderer, LOCIDatasetRenderer
 import geofeaturesapi.config as config
 from os.path import join
@@ -142,12 +144,15 @@ def troughs():
 
 @routes.route('/ages')
 def ages():
+    initNs = {
+        'geo': Namespace("http://www.opengis.net/ont/geosparql#"),
+        'sdo': SDO,
+        'time': TIME
+    }
     q = '''
-        PREFIX time: <http://www.w3.org/2006/time#>
-        PREFIX sdo: <https://schema.org/>
         SELECT ?age ?uri ?name
         WHERE {
-            ?uri a <http://linked.data.gov.au/def/geofeatures#Province> ;
+            ?uri a geo:Feature ;
                  time:hasTime ?age ;
                  sdo:name ?name .
         }
@@ -156,7 +161,7 @@ def ages():
     previous_age = 'http://resource.geosciml.org/classifier/ics/ischart/Cambrian'
     current_provinces = []
     html = ''
-    for r in config.G.query(q):
+    for r in config.G.query(q, initNs=initNs):
         this_age = str(r['age'])
         if this_age == previous_age:
             current_provinces.append(

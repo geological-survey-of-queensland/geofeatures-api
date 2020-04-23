@@ -10,7 +10,7 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 
-<http://linked.data.gov.au/dataset/qldgeofoi>
+<http://linked.data.gov.au/dataset/qldgeofeatures>
     a loci:Dataset , void:Dataset , dcat:DataService ;
     dct:publisher <http://linked.data.gov.au/org/gsq> ;
     dct:description """This is a Linked Data dataset (i.e. online in HTML & RDF, according to LD principles) of the Geological Features of Interest of Queensland.

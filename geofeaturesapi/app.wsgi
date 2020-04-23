@@ -1,5 +1,5 @@
 import sys
-sys.path.insert(0, '/var/www/gsq-foi-api')
-sys.path.insert(0, '/var/www/gsq-foi-api/foiapi')
+sys.path.insert(0, '/var/www/qldgeofeatures-api')
+sys.path.insert(0, '/var/www/qldgeofeatures-api/geofeatures')
 
 from app import app as application

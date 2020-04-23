@@ -3,7 +3,7 @@
 # GSQ's Queensland Geological Features API 
 This [API](https://en.wikipedia.org/wiki/Application_programming_interface) delivers the [Geological Survey of Queensland](https://en.wikipedia.org/wiki/Geological_Survey_of_Queensland)'s Structural Framework [Features of Interest](https://www.w3.org/TR/vocab-ssn/#SOSAFeatureOfInterest) data for Queensland according to [Linked Data](https://en.wikipedia.org/wiki/Linked_data) principles.
 
-The primary purpose of this API is to allow for the resolution of the URIs of various Features of Interest. For example, the FoI "Bowen Basin" has the persistent URI **http://linked.data.gov.au/dataset/qld-structural-framework/feature/BowenBasin** allocated to it and clicking on that URI will prompt this API to deliver a home page from it. Or data, depending on the type of request you make.
+The primary purpose of this API is to allow for the resolution of the URIs of various Features of Interest. For example, the Feature "Bowen Basin" has the persistent URI **http://linked.data.gov.au/dataset/qldgeofeatures/BowenBasin** allocated to it and clicking on that URI will prompt this API to deliver a home page from it. Or data, depending on the type of request you make.
 
 
 ## Data
@@ -13,7 +13,7 @@ The source data for this API so far is taken from data already published by GSQ 
 
 To access the underlying data directly, see GSQ's *Structural Framework Dataset*:
 
-* https://github.com/geological-survey-of-queensland/gsq-foi-dataset
+* https://github.com/geological-survey-of-queensland/qldgeofeatures-dataset
 
 
 ## API
@@ -44,19 +44,19 @@ In total, this API is installed on a web server and called by an HTTP server (Ap
     Example vars:
 
     ```
-    WSGIDaemonProcess foi threads=2 python-path=/var/www/gsq-foi-api/venv/:/var/www/gsq-foi-api/venv/lib/python3.6/site-packages/
+    WSGIDaemonProcess geof threads=2 python-path=/var/www/qldgeofeatures-api/venv/:/var/www/qldgeofeatures-api/venv/lib/python3.6/site-packages/
 
-    WSGIProcessGroup foi
+    WSGIProcessGroup geof
     WSGIApplicationGroup %{GLOBAL}
 
-    WSGIScriptAlias /foi /var/www/gsq-foi-api/foiapi/app.wsgi
-    <Directory /var/www/gsq-foi-api/foiapi/>
+    WSGIScriptAlias /qldgeofeatures /var/www/qldgeofeatures-api/geofeatures/app.wsgi
+    <Directory /var/www/qldgeofeatures-api/geofeatures/>
             WSGIScriptReloading On
             Require all granted
     </Directory>
     ```
 
-Now restart Apache and the site should be up at /foi
+Now restart Apache and the site should be up at /qldgeofeatures
 
  
 ## License
