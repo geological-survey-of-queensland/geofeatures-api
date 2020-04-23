@@ -166,3 +166,7 @@ dt {
 dl dd {
     margin: 0 0 .5em 2em;
 }
+
+.pagination ul li {
+    border: none;
+}

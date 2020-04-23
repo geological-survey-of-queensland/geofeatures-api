@@ -30,8 +30,8 @@ def home_ttl():
 
 @routes.route('/data.ttl')
 def data():
-    data = open(join(config.APP_DIR, 'config', 'data.ttl'), 'rb').read().decode('utf-8')
-    return Response(data, status=200, mimetype='text/turtle')
+    d = open(join(config.APP_DIR, 'config', 'data.ttl'), 'rb').read().decode('utf-8')
+    return Response(d, status=200, mimetype='text/turtle')
 
 
 #
@@ -50,7 +50,10 @@ def get_register(geo_feature_type_uri):
     r = []
     for row in config.G.query(q):
         r.append((
-            str(row['uri']).replace('http://linked.data.gov.au/dataset/qldgeofeaturesqldgeofeatures/', 'http://localhost:5000/feature/'),
+            str(row['uri']).replace(
+                'http://linked.data.gov.au/dataset/qldgeofeatures/',
+                'http://localhost:5000/feature/'
+            ),
             str(row['name'])
         ))
 
@@ -68,6 +71,15 @@ def container_response(container_uri, container_name, members):
         members,
         len(members)
     ).render()
+
+
+@routes.route('/feature/')
+def features():
+    container_uri = config.DATASET_URI + '/feature/'
+    object_class = 'http://www.opengis.net/ont/geosparql#Feature'
+    container_name = 'Features'
+
+    return container_response(container_uri, container_name, get_register(object_class))
 
 
 @routes.route('/basin/')
@@ -144,7 +156,7 @@ def troughs():
 
 @routes.route('/ages')
 def ages():
-    initNs = {
+    init_ns = {
         'geo': Namespace("http://www.opengis.net/ont/geosparql#"),
         'sdo': SDO,
         'time': TIME
@@ -161,13 +173,13 @@ def ages():
     previous_age = 'http://resource.geosciml.org/classifier/ics/ischart/Cambrian'
     current_provinces = []
     html = ''
-    for r in config.G.query(q, initNs=initNs):
+    for r in config.G.query(q, initNs=init_ns):
         this_age = str(r['age'])
         if this_age == previous_age:
             current_provinces.append(
                 '<a href="{}">{}</a>'.format(
                     str(r['uri']).replace('http://linked.data.gov.au/dataset/qldgeofeatures/',
-                                          'http://localhost:5000/'),
+                                          'http://localhost:5000/feature/'),
                     str(r['name']))
             )
         else:
