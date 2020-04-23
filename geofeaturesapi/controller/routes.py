@@ -113,7 +113,7 @@ def depressions():
 def grabens():
     container_uri = config.DATASET_URI + '/graben/'
     object_class = 'http://linked.data.gov.au/def/geofeatures#Graben'
-    container_name = 'Graben'
+    container_name = 'Grabens'
 
     return container_response(container_uri, container_name, get_register(object_class))
 
