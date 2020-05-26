@@ -71,11 +71,5 @@ The content of this API is licensed for use under the [Creative Commons 4.0 Lice
 <https://www.business.qld.gov.au/industries/mining-energy-water/resources/geoscience-information/gsq>  
 <GSQOpenData@dnrme.qld.gov.au>  
 
-*author*:  
-**Nicholas Car**  
-[SURROUND Australia Pty Ltd](https://surroundaustralia.com)  
-<nicholas.car@surroundaustralia.com>  
-<http://orcid.org/0000-0002-8742-7730>  
-
 
 
