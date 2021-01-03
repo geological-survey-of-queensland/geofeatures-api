@@ -45,7 +45,7 @@ def get_total(geo_feature_type_uri):
 
 
 def get_register(geo_feature_type_uri):
-    q = '''SELECT ?uri ?name WHERE {{?uri a <{}> ; sdo:name ?name}} ORDER BY ?name'''.format(geo_feature_type_uri)
+    q = '''PREFIX sdo: <https://schema.org/> SELECT ?uri ?name WHERE {{?uri a <{}> ; sdo:name ?name}} ORDER BY ?name'''.format(geo_feature_type_uri)
 
     r = []
     for row in config.G.query(q):
