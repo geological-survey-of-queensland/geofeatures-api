@@ -3,8 +3,8 @@ from flask_cors import CORS
 from pyldapi import ContainerRenderer
 from rdflib import Namespace
 from rdflib.namespace import SDO, TIME
-from geofeaturesapi.model import GeoFeatureRenderer, LOCIDatasetRenderer
-import geofeaturesapi.config as config
+from api.model import GeoFeatureRenderer, LOCIDatasetRenderer
+import api.config as config
 from os.path import join
 
 routes = Blueprint('controller', __name__)
@@ -52,7 +52,7 @@ def get_register(geo_feature_type_uri):
         r.append((
             str(row['uri']).replace(
                 'http://linked.data.gov.au/dataset/qldgeofeatures/',
-                'http://localhost:5000/feature/'
+                'https://qgf.surroundaustralia.com/feature/'
             ),
             str(row['name'])
         ))
@@ -179,7 +179,7 @@ def ages():
             current_provinces.append(
                 '<a href="{}">{}</a>'.format(
                     str(r['uri']).replace('http://linked.data.gov.au/dataset/qldgeofeatures/',
-                                          'http://localhost:5000/feature/'),
+                                          'https://qgf.surroundaustralia.com/feature/'),
                     str(r['name']))
             )
         else:

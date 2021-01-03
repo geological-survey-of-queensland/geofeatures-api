@@ -1,0 +1,38 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<http://linked.data.gov.au/dataset/qldgeofeatures> a rdf:Bag ;
+    rdfs:label "Queensland Features of Interest Dataset" ;
+    rdfs:member <http://linked.data.gov.au/dataset/qldgeofeatures/basin/>,
+        <http://linked.data.gov.au/dataset/qldgeofeatures/craton/>,
+        <http://linked.data.gov.au/dataset/qldgeofeatures/depression/>,
+        <http://linked.data.gov.au/dataset/qldgeofeatures/graben/>,
+        <http://linked.data.gov.au/dataset/qldgeofeatures/orogen/>,
+        <http://linked.data.gov.au/dataset/qldgeofeatures/province/>,
+        <http://linked.data.gov.au/dataset/qldgeofeatures/subprovince/>,
+        <http://linked.data.gov.au/dataset/qldgeofeatures/trough/> .
+
+<http://linked.data.gov.au/dataset/qldgeofeatures/basin/> a rdf:Bag ;
+    rdfs:label "Container of Basins" .
+
+<http://linked.data.gov.au/dataset/qldgeofeatures/craton/> a rdf:Bag ;
+    rdfs:label "Container of Cratons" .
+
+<http://linked.data.gov.au/dataset/qldgeofeatures/depression/> a rdf:Bag ;
+    rdfs:label "Container of Depressions" .
+
+<http://linked.data.gov.au/dataset/qldgeofeatures/graben/> a rdf:Bag ;
+    rdfs:label "Container of Graben" .
+
+<http://linked.data.gov.au/dataset/qldgeofeatures/orogen/> a rdf:Bag ;
+    rdfs:label "Container of Orogens" .
+
+<http://linked.data.gov.au/dataset/qldgeofeatures/province/> a rdf:Bag ;
+    rdfs:label "Container of Provinces" .
+
+<http://linked.data.gov.au/dataset/qldgeofeatures/subprovince/> a rdf:Bag ;
+    rdfs:label "Container of Sub Provinces" .
+
+<http://linked.data.gov.au/dataset/qldgeofeatures/trough/> a rdf:Bag ;
+    rdfs:label "Container of Troughs" .
+
