@@ -1,7 +1,7 @@
 from pyldapi import Renderer, Profile
 from rdflib import Graph, URIRef, Namespace, BNode
 from rdflib.namespace import RDF, SDO, TIME
-from geofeaturesapi.config import G
+from api.config import G
 from flask import Response, render_template
 
 

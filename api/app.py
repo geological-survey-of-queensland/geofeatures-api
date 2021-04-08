@@ -1,7 +1,7 @@
 import logging
-import geofeaturesapi.config as config
+import config
 from flask import Flask
-from geofeaturesapi.controller import routes
+from controller import routes
 import pyldapi
 import argparse
 
