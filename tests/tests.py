@@ -14,7 +14,7 @@ q = '''
     PREFIX sdo: <https://schema.org/>
     SELECT ?age ?uri ?name
     WHERE {
-        ?uri a <http://linked.data.gov.au/def/sweetgeofeatures#Province> ;
+        ?uri a <https://linked.data.gov.au/def/sweetgeofeatures#Province> ;
              time:hasTime ?age ;
              sdo:name ?name .
     }
@@ -28,7 +28,7 @@ for r in G.query(q):
     if this_age == current_age:
         current_provinces.append(
             '<a href="{}">{}</a>'.format(
-                str(r['uri']).replace('http://linked.data.gov.au/dataset/qld-structural-framework/', 'http://localhost:5000/'),
+                str(r['uri']).replace('https://linked.data.gov.au/dataset/qld-structural-framework/', 'http://localhost:5000/'),
                 str(r['name']))
         )
     else:

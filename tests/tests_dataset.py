@@ -17,7 +17,7 @@ def setup():
     # use the Request to call LOCIDatasetRenderer
     actual = LOCIDatasetRenderer(
         r,
-        url='http://linked.data.gov.au/dataset/qld-structural-framework'
+        url='https://linked.data.gov.au/dataset/qld-structural-framework'
     ).render()
     print(actual.response)
 

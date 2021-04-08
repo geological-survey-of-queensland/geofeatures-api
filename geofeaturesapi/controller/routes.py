@@ -51,7 +51,7 @@ def get_register(geo_feature_type_uri):
     for row in config.G.query(q):
         r.append((
             str(row['uri']).replace(
-                'http://linked.data.gov.au/dataset/qldgeofeatures/',
+                'https://linked.data.gov.au/dataset/qldgeofeatures/',
                 'http://localhost:5000/feature/'
             ),
             str(row['name'])
@@ -85,7 +85,7 @@ def features():
 @routes.route('/basin/')
 def basins():
     container_uri = config.DATASET_URI + '/basin/'
-    object_class = 'http://linked.data.gov.au/def/geofeatures#Basin'
+    object_class = 'https://linked.data.gov.au/def/geofeatures#Basin'
     container_name = 'Basins'
 
     return container_response(container_uri, container_name, get_register(object_class))
@@ -94,7 +94,7 @@ def basins():
 @routes.route('/craton/')
 def cratons():
     container_uri = config.DATASET_URI + '/craton/'
-    object_class = 'http://linked.data.gov.au/def/geofeatures#Craton'
+    object_class = 'https://linked.data.gov.au/def/geofeatures#Craton'
     container_name = 'Cratons'
 
     return container_response(container_uri, container_name, get_register(object_class))
@@ -103,7 +103,7 @@ def cratons():
 @routes.route('/depression/')
 def depressions():
     container_uri = config.DATASET_URI + '/depression/'
-    object_class = 'http://linked.data.gov.au/def/geofeatures#Depression'
+    object_class = 'https://linked.data.gov.au/def/geofeatures#Depression'
     container_name = 'Depressions'
 
     return container_response(container_uri, container_name, get_register(object_class))
@@ -112,7 +112,7 @@ def depressions():
 @routes.route('/graben/')
 def grabens():
     container_uri = config.DATASET_URI + '/graben/'
-    object_class = 'http://linked.data.gov.au/def/geofeatures#Graben'
+    object_class = 'https://linked.data.gov.au/def/geofeatures#Graben'
     container_name = 'Grabens'
 
     return container_response(container_uri, container_name, get_register(object_class))
@@ -121,7 +121,7 @@ def grabens():
 @routes.route('/orogen/')
 def orogens():
     container_uri = config.DATASET_URI + '/orogen/'
-    object_class = 'http://linked.data.gov.au/def/geofeatures#Orogen'
+    object_class = 'https://linked.data.gov.au/def/geofeatures#Orogen'
     container_name = 'Orogens'
 
     return container_response(container_uri, container_name, get_register(object_class))
@@ -130,7 +130,7 @@ def orogens():
 @routes.route('/province/')
 def provinces():
     container_uri = config.DATASET_URI + '/province/'
-    object_class = 'http://linked.data.gov.au/def/geofeatures#Province'
+    object_class = 'https://linked.data.gov.au/def/geofeatures#Province'
     container_name = 'Provinces'
 
     return container_response(container_uri, container_name, get_register(object_class))
@@ -139,7 +139,7 @@ def provinces():
 @routes.route('/subprovince/')
 def subprovinces():
     container_uri = config.DATASET_URI + '/subprovince/'
-    object_class = 'http://linked.data.gov.au/def/geofeatures#SubProvince'
+    object_class = 'https://linked.data.gov.au/def/geofeatures#SubProvince'
     container_name = 'Sub Provinces'
 
     return container_response(container_uri, container_name, get_register(object_class))
@@ -148,7 +148,7 @@ def subprovinces():
 @routes.route('/trough/')
 def troughs():
     container_uri = config.DATASET_URI + '/trough/'
-    object_class = 'http://linked.data.gov.au/def/geofeatures#Trough'
+    object_class = 'https://linked.data.gov.au/def/geofeatures#Trough'
     container_name = 'Troughs'
 
     return container_response(container_uri, container_name, get_register(object_class))
@@ -178,7 +178,7 @@ def ages():
         if this_age == previous_age:
             current_provinces.append(
                 '<a href="{}">{}</a>'.format(
-                    str(r['uri']).replace('http://linked.data.gov.au/dataset/qldgeofeatures/',
+                    str(r['uri']).replace('https://linked.data.gov.au/dataset/qldgeofeatures/',
                                           'http://localhost:5000/feature/'),
                     str(r['name']))
             )
@@ -204,5 +204,5 @@ def ages():
 #
 @routes.route('/feature/<feature_id>')
 def feature(feature_id):
-    uri = "http://linked.data.gov.au/dataset/qldgeofeatures/" + feature_id
+    uri = "https://linked.data.gov.au/dataset/qldgeofeatures/" + feature_id
     return GeoFeatureRenderer(request, uri).render()

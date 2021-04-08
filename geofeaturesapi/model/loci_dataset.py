@@ -24,7 +24,7 @@ class LOCIDatasetRenderer(ContainerOfContainersRenderer):
         # alt is added by the Register class
         profiles = {
             'loci': Profile(
-                'http://linked.data.gov.au/def/loci',
+                'https://linked.data.gov.au/def/loci',
                 'LocI Ontology',
                 'A profile of several ontologies implemented to govern Linked Data resources published within the '
                 'LocI project.',

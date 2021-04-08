@@ -7,7 +7,7 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 
-<http://linked.data.gov.au/dataset/qldgeofeatures>
+<https://linked.data.gov.au/dataset/qldgeofeatures>
     a dcat:Dataset ;
     dcat:distribution
         <https://gsq.cat/qldgeofeatures> ,
@@ -29,7 +29,7 @@ Currently this dataset contains only Structural Framework data sourced from the 
 This tool uses the SWEET Geological Features Profile Ontology (https://github.com/geological-survey-of-queensland/sweet-geological-features-profile-ont) as its main data model and that model conforms to the Location Index (LocI) project's requirements so this information is compatible with other spatial data published by LocI."""@en ;
     dct:issued "2020-02-04"^^xsd:date ;
     dct:modified "2020-02-04"^^xsd:date ;
-    dct:publisher <http://linked.data.gov.au/org/gsq> ;
+    dct:publisher <https://linked.data.gov.au/org/gsq> ;
     dct:spatial [ a dct:Location ;
             dcat:bbox "POLYGON ((96.0000 -45.0000, 96.0000 -9.0000, 168.0000 -9.0000, 168.0000 -45.0000, 96.0000 -45.0000))"^^gsp:wktLiteral ;
             locn:geometry "{\"type\": \"Polygon\", \"coordinates\": [[ [96.0,-45.0],[96.0,-9.0], [168.0,-9.0], [168.0,-45.0], [96.0,-45.0]]]}"^^<https://www.iana.org/assignments/media-types/application/vnd.geo+json> ] ;
@@ -38,14 +38,14 @@ This tool uses the SWEET Geological Features Profile Ontology (https://github.co
 
 <https://gsq.cat/qldgeofeatures> a dcat:DataService ;
     dct:conformsTo <https://github.com/UKGovLD/linked-data-api/blob/wiki/Specification.md> ;
-    dct:publisher <http://linked.data.gov.au/org/gsq> ;
+    dct:publisher <https://linked.data.gov.au/org/gsq> ;
     dct:title "Qld GeoFeatures via a Linked Data API" ;
     dct:license <http://creativecommons.org/licenses/by/4.0/> ;
     dcat:endpointDescription "A Linked Data API" ;
     dcat:endpointURL <https://gsq.cat/qldgeofeatures> ;
-    dcat:servesDataset <http://linked.data.gov.au/dataset/qldgeofeatures> ;
+    dcat:servesDataset <https://linked.data.gov.au/dataset/qldgeofeatures> ;
 .
 
-<http://linked.data.gov.au/org/gsq> a sdo:Organization ;
+<https://linked.data.gov.au/org/gsq> a sdo:Organization ;
     sdo:name "Geological Survey of Queensland" ;
 .

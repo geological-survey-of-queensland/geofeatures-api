@@ -25,7 +25,7 @@ class GeoFeatureRenderer(Renderer):
                 'text/html'
             ),
             'loci': Profile(
-                'http://linked.data.gov.au/def/loci',
+                'https://linked.data.gov.au/def/loci',
                 'LocI Ontology',
                 'A profile of several ontologies implemented to govern Linked Data resources published within the '
                 'LocI project.',
@@ -60,15 +60,15 @@ class GeoFeatureRenderer(Renderer):
         else:
             # extract properties from RDF
             mini_graph = Graph()
-            SF = Namespace('http://linked.data.gov.au/dataset/qldgeofeatures/')
+            SF = Namespace('https://linked.data.gov.au/dataset/qldgeofeatures/')
             mini_graph.bind('sf', SF)
-            SGF = Namespace('http://linked.data.gov.au/def/geofeatures#')
+            SGF = Namespace('https://linked.data.gov.au/def/geofeatures#')
             mini_graph.bind('sgf', SGF)
             GEO = Namespace("http://www.opengis.net/ont/geosparql#")
             mini_graph.bind('geo', GEO)
             mini_graph.bind('sdo', SDO)
             mini_graph.bind('time', TIME)
-            GEOX = Namespace("http://linked.data.gov.au/def/geox#")
+            GEOX = Namespace("https://linked.data.gov.au/def/geox#")
             mini_graph.bind('geox', GEOX)
             GT = Namespace('http://resource.geosciml.org/classifier/ics/ischart/')
             mini_graph.bind('geotime', GT)
@@ -158,6 +158,6 @@ if __name__ == '__main__':
 
     # import pprint
     # pprint.pprint(request.view)
-    p = GeoFeatureRenderer(request, 'http://linked.data.gov.au/dataset/qldgeofeatures/BarnardProvince')
+    p = GeoFeatureRenderer(request, 'https://linked.data.gov.au/dataset/qldgeofeatures/BarnardProvince')
     print()
     print(p.render())
