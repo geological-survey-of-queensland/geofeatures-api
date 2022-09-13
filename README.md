@@ -64,12 +64,17 @@ The content of this API is licensed for use under the [Creative Commons 4.0 Lice
 
 
 ## Contacts
-*owner*:  
-**Geological Survey of Queensland**  
-*Within the Queensland Department of Natural Resources, Mines & Energy*  
-1 William St, Brisbane, Queensland, Australia  
-<https://www.business.qld.gov.au/industries/mining-energy-water/resources/geoscience-information/gsq>  
-<GSQOpenData@dnrme.qld.gov.au>  
+*System owner*:  
+**Mark Gordon**,
+Geological Survey of Queensland,
+Department of Resources,
+Brisbane, QLD, Australia,
+<mark.gordon@resources.qld.gov.au>  
 
-
-
+*Contributors*:  
+**Vance Kelly**,
+Principal Data Manager,
+Geological Survey of Queensland,
+Department of Resources,
+Brisbane, QLD, Australia,  
+<vance.kelly@resources.qld.gov.au>
